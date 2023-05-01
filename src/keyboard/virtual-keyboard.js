@@ -11,12 +11,25 @@ super(parentNode, tagName, className);
 this.changeColor = new ChangeColor(this.node, 'div','change_light_color');
 this.theme = new Theme(this.node, 'div', 'night_mode');
 this.keyboard = new Keyboard(this.node, 'div', 'keyboard_wrapper')
-const keyBoardColor = new Control(this.keyboard.node, 'div', 'keyboard_lights')
-this.keyboard.node.prepend(keyBoardColor.node)
+this.keyBoardColor = new Control(this.keyboard.node, 'div', 'keyboard_lights')
+this.keyboard.node.prepend(this.keyBoardColor.node)
 this.info = new Info(this.node, 'div', 'info') 
-console.log(this.keyboard.node.lang)
+console.log(this.keyBoardColor)
  }
  init(){
-  this.keyboard.handleEvent();  
+  this.keyboard.handleEvent(); 
+  this.boardColor() 
+ }
+ 
+boardColor(){
+const inputColor = this.changeColor.node.querySelector('.colors_input')
+const boardColor = document.querySelector('.keyboard_lights')
+inputColor.addEventListener('input',function() {
+  // for(let i = 0; i < keys.length; i++) {
+  //     keys[i].style.color = inputColors.value
+  // }
+  
+  boardColor.style.backgroundColor = inputColor.value;
+})
  }
 }

@@ -79,7 +79,53 @@ export class Keyboard extends Control {
             this.updateBoard()
                   }
         console.log(e.code)
-        if(!e.code in funcKeys) this.output.updateValue(e.key);
+        if(!(e.code in funcKeys)) this.output.updateValue(e.key);
+        const startPos = this.output.node.selectionStart;
+        const endPos = this.output.node.selectionEnd;
+        switch (e.code) {
+          case "Tab":
+            this.output.node.value = this.output.node.value.substring(0, startPos) + "    " + this.output.node.value.substring(endPos, this.output.node.value.length);
+            this.output.node.selectionStart = startPos + 4;
+            this.output.node.selectionEnd = startPos + 4;
+            break;
+          case "Enter":
+            elem.value = elem.value.substring(0, startPos) + "\n" + elem.value.substring(endPos, elem.value.length);
+            elem.selectionStart = startPos + 1;
+            elem.selectionEnd = startPos + 1;
+            break;   
+          case "Backspace":
+            if (startPos > 0) {
+              elem.value = elem.value.substring(0, startPos - 1) + elem.value.substring(endPos, elem.value.length);
+              elem.selectionStart = startPos - 1;
+              elem.selectionEnd = startPos - 1;
+            }
+            break;
+          case "Delete":
+            elem.value = elem.value.substring(0, startPos) + elem.value.substring(endPos + 1, elem.value.length);
+            elem.selectionStart = startPos;
+            elem.selectionEnd = startPos;
+            break;
+          }
+          // Перемещаем курсор в зависимости от нажатой клавиши
+      switch(e.key) {
+        case 'ArrowUp':
+          elem.selectionStart = getPrevLineStart(elem.value, startPos);
+          elem.selectionEnd = elem.selectionStart;
+          break;
+        case 'ArrowDown':
+          elem.selectionStart = getNextLineStart(elem.value, startPos);
+          elem.selectionEnd = elem.selectionStart;
+          break;
+        case 'ArrowLeft':
+          elem.selectionStart = startPos - 1;
+          elem.selectionEnd = startPos - 1;
+          break;
+        case 'ArrowRight':
+          elem.selectionStart = startPos + 1;
+            elem.selectionEnd = startPos + 1;
+            break;
+      }
+
         if (this.board.keyMap[e.code]) {
           
           e.preventDefault();
