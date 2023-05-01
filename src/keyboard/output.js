@@ -1,4 +1,4 @@
-import {Control} from '../common/control';
+import {Control} from '../common/control.js';
 
 export class Output extends Control {
   constructor(parentNode, tagName = 'div', className = '', content = '') {
@@ -7,6 +7,6 @@ export class Output extends Control {
   }
 
   updateValue(value) {
-    this.node.textContent = value;
+    this.node.textContent += value;
   }
 }

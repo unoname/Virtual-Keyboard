@@ -1,5 +1,5 @@
 export class Control {
-  construtor(parentNode, tagName = 'div', className = '', content = '') {
+  constructor(parentNode, tagName = 'div', className = '', content = '') {
     const element = document.createElement(tagName);
     element.classList.add(className);
     element.innerHTML = content;
