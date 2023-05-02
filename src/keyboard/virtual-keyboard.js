@@ -18,10 +18,10 @@ console.log(this.keyBoardColor)
  }
  init(){
   this.keyboard.handleEvent(); 
-  this.boardColor() 
+  this.changeBoardColor() 
  }
  
-boardColor(){
+changeBoardColor(){
 const inputColor = this.changeColor.node.querySelector('.colors_input')
 const boardColor = document.querySelector('.keyboard_lights')
 inputColor.addEventListener('input',function() {

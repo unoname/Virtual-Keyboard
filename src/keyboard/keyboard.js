@@ -78,7 +78,7 @@ export class Keyboard extends Control {
         if (this.shiftPressed && this.altPressed) {          
             this.updateBoard()
                   }
-        console.log(e.code)
+        
         if(!(e.code in funcKeys)) this.output.updateValue(e.key);
         const startPos = this.output.node.selectionStart;
         const endPos = this.output.node.selectionEnd;
@@ -126,8 +126,7 @@ export class Keyboard extends Control {
             break;
       }
 
-        if (this.board.keyMap[e.code]) {
-          
+        if (this.board.keyMap[e.code]) {          
           e.preventDefault();
           this.board.keyMap[e.code].node.classList.add('active');
           setTimeout(() => {
