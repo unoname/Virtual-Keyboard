@@ -2,7 +2,7 @@ import { Keyboard } from "./keyboard.js";
 import { Control } from "../common/control.js";
 import {ChangeColor} from "../layout/changeColor.js";
 import {Theme} from "../layout/theme.js";
-import { Info } from "../layout/Info.js";
+import { Info } from "../layout/info.js";
 
 
 export class VirtualKeyboard extends Control {
