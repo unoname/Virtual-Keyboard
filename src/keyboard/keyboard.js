@@ -55,17 +55,13 @@ export class Keyboard extends Control {
     
   }
     handleEvent(){
-      this.node.addEventListener('mousedown', (e) => {   
-        console.log(e.target.innerText)     
+      this.node.addEventListener('mousedown', (e) => {            
         if (e.target.classList.contains('keys')) {
           if(!e.target.classList.contains('func')) {
             let keyLabel = e.target.innerText;
           if (this.isCapsLock) {
             keyLabel = keyLabel.toUpperCase();
-          }
-          if (this.lang === 'ru' && e.target.dataset.symbolRu) {
-            keyLabel = e.target.innerText;
-          }
+          }         
           this.output.updateValue(keyLabel)
           }  else {
             this.actionFunctionalKeys(e)
