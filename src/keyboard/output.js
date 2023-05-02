@@ -8,5 +8,6 @@ export class Output extends Control {
 
   updateValue(value) {
     this.node.textContent += value;
+    this.node.focus();
   }
 }

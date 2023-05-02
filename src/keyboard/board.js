@@ -7,7 +7,7 @@ export class Board extends Control {
   constructor(parentNode, tagName, className, config, lang = 'en'){
     super(parentNode, tagName, className)
     this.signal = new Signal()
-    this.lang = lang;
+    this.lang = localStorage.getItem('lang') || lang;
     this.keyMap = {};    
     for(let row of config) {
       const rowView = new Control(this.node, 'div', 'row');

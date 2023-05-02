@@ -10,11 +10,10 @@ export class VirtualKeyboard extends Control {
 super(parentNode, tagName, className);
 this.changeColor = new ChangeColor(this.node, 'div','change_light_color');
 this.theme = new Theme(this.node, 'div', 'night_mode');
-this.keyboard = new Keyboard(this.node, 'div', 'keyboard_wrapper')
-this.keyBoardColor = new Control(this.keyboard.node, 'div', 'keyboard_lights')
-this.keyboard.node.prepend(this.keyBoardColor.node)
-this.info = new Info(this.node, 'div', 'info') 
-console.log(this.keyBoardColor)
+this.keyboard = new Keyboard(this.node, 'div', 'keyboard_wrapper');
+this.keyBoardColor = new Control(this.keyboard.node, 'div', 'keyboard_lights');
+this.keyboard.node.prepend(this.keyBoardColor.node);
+this.info = new Info(this.node, 'div', 'info');
  }
  init(){
   this.keyboard.handleEvent(); 
