@@ -55,14 +55,14 @@ export class Keyboard extends Control {
     
   }
     handleEvent(){
-      this.node.addEventListener('mousedown', (e) => {            
+      this.board.node.addEventListener('click', (e) => {            
         if (e.target.classList.contains('keys')) {
           if(!e.target.classList.contains('func')) {
             let keyLabel = e.target.innerText;
           if (this.isCapsLock) {
             keyLabel = keyLabel.toUpperCase();
           }         
-          this.output.updateValue(keyLabel)
+          this.output.updateValue(keyLabel);
           }  else {
             this.actionFunctionalKeys(e)
           }        
@@ -71,10 +71,10 @@ export class Keyboard extends Control {
             e.target.classList.remove('active');
           }, 100);
         }
-        // document.dispatchEvent(new KeyboardEvent('keydown', { key: e.target.innerText }));
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: e.target.innerText }));
       });
       
-      document.addEventListener('keydown', (e) => {
+      this.board.node.addEventListener('keydown', (e) => {
         if (e.key === "Shift") {
           this.shiftPressed = true;
         } else if (e.key === "Alt") {
@@ -85,6 +85,7 @@ export class Keyboard extends Control {
                   }
         if(!(e.code in funcKeys)) {
           this.output.updateValue(e.key);
+
         } 
         if(e.code in funcKeys) {
           this.actionFunctionalKeys(e)
@@ -117,58 +118,69 @@ export class Keyboard extends Control {
        const startPos = this.output.node.selectionStart;
         const endPos = this.output.node.selectionEnd;
         const key = e.code || e.target.innerText
+        console.log(this.output.node.selectionStart)
+        console.log(this.output.node.value)
+        console.log(key)
         switch (key) {
           case "Tab":
             this.output.node.value = this.output.node.value.substring(0, startPos) + "    " + this.output.node.value.substring(endPos, this.output.node.value.length);
+            this.output.node.focus();
             this.output.node.selectionStart = startPos + 4;
             this.output.node.selectionEnd = startPos + 4;
-            this.output.node.focus();
+            e.preventDefault();
             break;
           case "Enter":
             this.output.node.value = this.output.node.value.substring(0, startPos) + "\n" + this.output.node.value.substring(endPos, this.output.node.value.length);
+            this.output.node.focus();
             this.output.node.selectionStart = startPos + 1;
             this.output.node.selectionEnd = startPos + 1;
-            this.output.node.focus();
+            e.preventDefault();
             break;   
-          case "Backspace":
-            if (startPos > 0) {
+          case "Backspace":            
               this.output.node.value = this.output.node.value.substring(0, startPos - 1) + this.output.node.value.substring(endPos, this.output.node.value.length);
+              this.output.node.focus();
               this.output.node.selectionStart = startPos - 1;
               this.output.node.selectionEnd = startPos - 1;
-              this.output.node.focus();
-            }
+              e.preventDefault();
+            
             break;
           case "Delete", "Del":
             this.output.node.value = this.output.node.value.substring(0, startPos) + this.output.node.value.substring(endPos + 1, this.output.node.value.length);
+            this.output.node.focus();
             this.output.node.selectionStart = startPos;
             this.output.node.selectionEnd = startPos;
-            this.output.node.focus();
+            e.preventDefault();
             break;         
             case 'ArrowUp', '▲':
               this.output.node.selectionStart = getPrevLineStart(this.output.node.value, startPos);
               this.output.node.selectionEnd = this.output.node.selectionStart;
               this.output.node.focus();
+              e.preventDefault();
               break;
             case 'ArrowDown', '▼':
               this.output.node.selectionStart = getNextLineStart(this.output.node.value, startPos);
               this.output.node.selectionEnd = this.output.node.selectionStart;
               this.output.node.focus();
+              e.preventDefault();
               break;
-            case 'ArrowLeft', '◄':
+            case 'ArrowLeft', '◄':             
               this.output.node.selectionStart = startPos - 1;
               this.output.node.selectionEnd = startPos - 1;
               this.output.node.focus();
+              e.preventDefault();
               break;
             case 'ArrowRight', '►':
               this.output.node.selectionStart = startPos + 1;
               this.output.node.selectionEnd = startPos + 1;
               this.output.node.focus();
+              e.preventDefault();              
               break;
             case "Space":
-              this.output.node.value = this.output.node.value.substring(0, startPos) + " " + this.output.node.value.substring(endPos, this.output.node.value.length);
+              // this.output.node.value = this.output.node.value.substring(0, startPos) + " " + this.output.node.value.substring(endPos, this.output.node.value.length);
+              this.output.updateValue(this.output.node.value + ' ')
+              this.output.node.focus();
               this.output.node.selectionStart = startPos + 1;
               this.output.node.selectionEnd = startPos + 1;
-              this.output.node.focus();
               break;
           }
           function getPrevLineStart(text, pos) {

@@ -6,8 +6,8 @@ export class Output extends Control {
     this.node.setAttribute('autofocus', 'true')
   }
 
-  updateValue(value) {
-    this.node.textContent += value;
+  updateValue(text) {
+    this.node.value += text;
     this.node.focus();
   }
 }
