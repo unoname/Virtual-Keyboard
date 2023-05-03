@@ -20,7 +20,8 @@ const funcKeys = {
   ArrowLeft: 'ArrowLeft',
   ArrowDown: 'ArrowDown',
   ArrowRight: 'ArrowRight',
-  Tab: 'Tab'
+  Tab: 'Tab',
+  Backspace: 'Backspace'
 }
 export class Keyboard extends Control {  
   constructor(parentNode, tagName, className){
@@ -46,21 +47,11 @@ export class Keyboard extends Control {
       }
       if (this.shiftPressed && this.altPressed) {          
         this.updateBoard()
-              }
-      if (e.key === 'Tab') {
-        e.preventDefault();
-        const startPos = this.output.node.selectionStart;
-        const endPos = this.output.node.selectionEnd;
-        const before = this.output.node.value.slice(0, startPos);
-        const after = this.output.node.value.slice(endPos);
-        const indent = "    ";
-        const newValue = before + indent + after;
-        this.output.node.value = newValue;
-        const newCursorPos = startPos + indent.length;
-        this.output.node.selectionStart = newCursorPos;
-        this.output.node.selectionEnd = newCursorPos;
-        this.output.node.focus();
       }
+      if(e.code in funcKeys) {       
+        this.actionFunctionalKeys(e)
+      }      
+      
       if (this.board.keyMap[e.code]) {          
         e.preventDefault();
         this.board.keyMap[e.code].node.classList.add('active');
@@ -69,7 +60,7 @@ export class Keyboard extends Control {
         }, 100);
       }
     });
-    
+
     document.addEventListener('click', (e) => {      
       if (e.target.innerText === 'CapsLk') {
         this.isCapsLock = !this.isCapsLock;
@@ -135,15 +126,10 @@ export class Keyboard extends Control {
         switch (key) {
           case "Tab": 
           e.preventDefault();
-          const before = this.output.node.value.slice(0, startPos);
-          const after = this.output.node.value.slice(endPos);
-          const indent = "    ";
-          const newValue = before + indent + after;
-          this.output.node.value = newValue;
-          const newCursorPos = startPos + indent.length;
-          this.output.node.selectionStart = newCursorPos;
-          this.output.node.selectionEnd = newCursorPos;
+          this.output.node.value = this.output.node.value.substring(0, startPos) + "    " + this.output.node.value.substring(endPos, this.output.node.value.length);
           this.output.node.focus();
+          this.output.node.selectionStart = startPos + 4;
+          this.output.node.selectionEnd = startPos + 4;          
           break;
           case "Enter":
             this.output.node.value = this.output.node.value.substring(0, startPos) + "\n" + this.output.node.value.substring(endPos, this.output.node.value.length);
@@ -152,21 +138,20 @@ export class Keyboard extends Control {
             this.output.node.selectionEnd = startPos + 1;
             e.preventDefault();
             break;   
-          case "Backspace":            
+          case "Backspace":
+            e.preventDefault();            
               this.output.node.value = this.output.node.value.substring(0, startPos - 1) + this.output.node.value.substring(endPos, this.output.node.value.length);
-              this.output.node.focus();
               this.output.node.selectionStart = startPos - 1;
-              this.output.node.selectionEnd = startPos - 1;
-              e.preventDefault();
-            
+              this.output.node.selectionEnd = startPos - 1;           
+              this.output.node.focus();
             break;
           case "Delete": 
           case "Del":
+            e.preventDefault();
             this.output.node.value = this.output.node.value.substring(0, startPos) + this.output.node.value.substring(endPos + 1, this.output.node.value.length);
             this.output.node.focus();
             this.output.node.selectionStart = startPos;
             this.output.node.selectionEnd = startPos;
-            e.preventDefault();
             break;         
             case 'ArrowUp':
             case '▲':
@@ -198,7 +183,6 @@ export class Keyboard extends Control {
               break;
             case "Space":
               this.output.node.value = this.output.node.value.substring(0, startPos) + " " + this.output.node.value.substring(endPos, this.output.node.value.length);
-              // this.output.updateValue(this.output.node.value + ' ')
               this.output.node.selectionStart = startPos + 1;
               this.output.node.selectionEnd = startPos + 1;
               this.output.node.focus();
