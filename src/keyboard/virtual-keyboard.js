@@ -23,7 +23,7 @@ this.info = new Info(this.node, 'div', 'info');
 changeBoardColor(){
 const inputColor = this.changeColor.node.querySelector('.colors_input')
 const boardColor = document.querySelector('.keyboard_lights')
-inputColor.addEventListener('input',function() {
+inputColor.addEventListener('input', function() {
   // for(let i = 0; i < keys.length; i++) {
   //     keys[i].style.color = inputColors.value
   // }

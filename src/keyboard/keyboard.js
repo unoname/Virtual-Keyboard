@@ -20,6 +20,7 @@ const funcKeys = {
   ArrowLeft: 'ArrowLeft',
   ArrowDown: 'ArrowDown',
   ArrowRight: 'ArrowRight',
+  Tab: 'Tab'
 }
 export class Keyboard extends Control {  
   constructor(parentNode, tagName, className){
@@ -37,7 +38,38 @@ export class Keyboard extends Control {
       if (e.code === 'CapsLock') {
         this.isCapsLock = !this.isCapsLock;
       }      
+      if (e.key === "Shift") {
+        this.shiftPressed = true;
+      } 
+      if (e.key === "Alt") {
+        this.altPressed = true;
+      }
+      if (this.shiftPressed && this.altPressed) {          
+        this.updateBoard()
+              }
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const startPos = this.output.node.selectionStart;
+        const endPos = this.output.node.selectionEnd;
+        const before = this.output.node.value.slice(0, startPos);
+        const after = this.output.node.value.slice(endPos);
+        const indent = "    ";
+        const newValue = before + indent + after;
+        this.output.node.value = newValue;
+        const newCursorPos = startPos + indent.length;
+        this.output.node.selectionStart = newCursorPos;
+        this.output.node.selectionEnd = newCursorPos;
+        this.output.node.focus();
+      }
+      if (this.board.keyMap[e.code]) {          
+        e.preventDefault();
+        this.board.keyMap[e.code].node.classList.add('active');
+        setTimeout(() => {
+          this.board.keyMap[e.code].node.classList.remove('active');
+        }, 100);
+      }
     });
+    
     document.addEventListener('click', (e) => {      
       if (e.target.innerText === 'CapsLk') {
         this.isCapsLock = !this.isCapsLock;
@@ -51,9 +83,9 @@ export class Keyboard extends Control {
       if (e.key === "Alt") {
         this.altPressed = false;
       }
-    });  
-    
-  }
+    });      
+  } 
+
     handleEvent(){
       this.board.node.addEventListener('click', (e) => {            
         if (e.target.classList.contains('keys')) {
@@ -71,36 +103,18 @@ export class Keyboard extends Control {
             e.target.classList.remove('active');
           }, 100);
         }
-        document.dispatchEvent(new KeyboardEvent('keydown', { key: e.target.innerText }));
       });
       
-      this.board.node.addEventListener('keydown', (e) => {
-        if (e.key === "Shift") {
-          this.shiftPressed = true;
-        } else if (e.key === "Alt") {
-          this.altPressed = true;
-        }
-        if (this.shiftPressed && this.altPressed) {          
-            this.updateBoard()
-                  }
+      this.board.node.addEventListener('keydown', (e) => {     
         if(!(e.code in funcKeys)) {
           this.output.updateValue(e.key);
-
         } 
-        if(e.code in funcKeys) {
+        if(e.code in funcKeys) {       
           this.actionFunctionalKeys(e)
-        }
-                      
-        if (this.board.keyMap[e.code]) {          
-          e.preventDefault();
-          this.board.keyMap[e.code].node.classList.add('active');
-          setTimeout(() => {
-            this.board.keyMap[e.code].node.classList.remove('active');
-          }, 100);
-        }
-      });
-       
+        }      
+      });       
     } 
+
     updateBoard() {
       if(this.lang == 'en') {
         localStorage.setItem('lang', 'ru');
@@ -117,18 +131,20 @@ export class Keyboard extends Control {
     actionFunctionalKeys(e) {
        const startPos = this.output.node.selectionStart;
         const endPos = this.output.node.selectionEnd;
-        const key = e.code || e.target.innerText
-        console.log(this.output.node.selectionStart)
-        console.log(this.output.node.value)
-        console.log(key)
+        const key = e.code || e.target.innerText || 'Space';       
         switch (key) {
-          case "Tab":
-            this.output.node.value = this.output.node.value.substring(0, startPos) + "    " + this.output.node.value.substring(endPos, this.output.node.value.length);
-            this.output.node.focus();
-            this.output.node.selectionStart = startPos + 4;
-            this.output.node.selectionEnd = startPos + 4;
-            e.preventDefault();
-            break;
+          case "Tab": 
+          e.preventDefault();
+          const before = this.output.node.value.slice(0, startPos);
+          const after = this.output.node.value.slice(endPos);
+          const indent = "    ";
+          const newValue = before + indent + after;
+          this.output.node.value = newValue;
+          const newCursorPos = startPos + indent.length;
+          this.output.node.selectionStart = newCursorPos;
+          this.output.node.selectionEnd = newCursorPos;
+          this.output.node.focus();
+          break;
           case "Enter":
             this.output.node.value = this.output.node.value.substring(0, startPos) + "\n" + this.output.node.value.substring(endPos, this.output.node.value.length);
             this.output.node.focus();
@@ -144,43 +160,48 @@ export class Keyboard extends Control {
               e.preventDefault();
             
             break;
-          case "Delete", "Del":
+          case "Delete": 
+          case "Del":
             this.output.node.value = this.output.node.value.substring(0, startPos) + this.output.node.value.substring(endPos + 1, this.output.node.value.length);
             this.output.node.focus();
             this.output.node.selectionStart = startPos;
             this.output.node.selectionEnd = startPos;
             e.preventDefault();
             break;         
-            case 'ArrowUp', '▲':
+            case 'ArrowUp':
+            case '▲':
               this.output.node.selectionStart = getPrevLineStart(this.output.node.value, startPos);
               this.output.node.selectionEnd = this.output.node.selectionStart;
               this.output.node.focus();
               e.preventDefault();
               break;
-            case 'ArrowDown', '▼':
+            case 'ArrowDown':
+              case '▼':
               this.output.node.selectionStart = getNextLineStart(this.output.node.value, startPos);
               this.output.node.selectionEnd = this.output.node.selectionStart;
               this.output.node.focus();
               e.preventDefault();
               break;
-            case 'ArrowLeft', '◄':             
+            case 'ArrowLeft':
+            case '◄':             
               this.output.node.selectionStart = startPos - 1;
               this.output.node.selectionEnd = startPos - 1;
               this.output.node.focus();
               e.preventDefault();
               break;
-            case 'ArrowRight', '►':
+            case 'ArrowRight':
+              case '►':
               this.output.node.selectionStart = startPos + 1;
               this.output.node.selectionEnd = startPos + 1;
               this.output.node.focus();
               e.preventDefault();              
               break;
             case "Space":
-              // this.output.node.value = this.output.node.value.substring(0, startPos) + " " + this.output.node.value.substring(endPos, this.output.node.value.length);
-              this.output.updateValue(this.output.node.value + ' ')
-              this.output.node.focus();
+              this.output.node.value = this.output.node.value.substring(0, startPos) + " " + this.output.node.value.substring(endPos, this.output.node.value.length);
+              // this.output.updateValue(this.output.node.value + ' ')
               this.output.node.selectionStart = startPos + 1;
               this.output.node.selectionEnd = startPos + 1;
+              this.output.node.focus();
               break;
           }
           function getPrevLineStart(text, pos) {
