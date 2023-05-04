@@ -33,48 +33,7 @@ export class Keyboard extends Control {
     this.isCapsLock = false;
     this.lang = 'en';
     this.shiftPressed = false;
-    this.altPressed = false;
-
-    document.addEventListener('keydown', (e) => {
-      if (e.code === 'CapsLock') {
-        this.isCapsLock = !this.isCapsLock;
-      }      
-      if (e.key === "Shift") {
-        this.shiftPressed = true;
-      } 
-      if (e.key === "Alt") {
-        this.altPressed = true;
-      }
-      if (this.shiftPressed && this.altPressed) {          
-        this.updateBoard()
-      }
-      if(e.code in funcKeys) {       
-        this.actionFunctionalKeys(e)
-      }      
-      
-      if (this.board.keyMap[e.code]) {          
-        e.preventDefault();
-        this.board.keyMap[e.code].node.classList.add('active');
-        setTimeout(() => {
-          this.board.keyMap[e.code].node.classList.remove('active');
-        }, 100);
-      }
-    });
-
-    document.addEventListener('click', (e) => {      
-      if (e.target.innerText === 'CapsLk') {
-        this.isCapsLock = !this.isCapsLock;
-      }      
-    });
-
-    document.addEventListener('keyup', (e) => {
-      if (e.key === "Shift") {
-        this.shiftPressed = false;
-      }
-      if (e.key === "Alt") {
-        this.altPressed = false;
-      }
-    });      
+    this.altPressed = false;      
   } 
 
     handleEvent(){
@@ -94,16 +53,49 @@ export class Keyboard extends Control {
             e.target.classList.remove('active');
           }, 100);
         }
-      });
-      
-      this.board.node.addEventListener('keydown', (e) => {     
-        if(!(e.code in funcKeys)) {
-          this.output.updateValue(e.key);
+      });      
+      document.addEventListener('keydown', (e) => {
+        if (e.code === 'CapsLock') {
+          this.isCapsLock = !this.isCapsLock;
+        }      
+        if (e.key === "Shift") {
+          this.shiftPressed = true;
         } 
+        if (e.key === "Alt") {
+          this.altPressed = true;
+        }
+        if (this.shiftPressed && this.altPressed) {          
+          this.updateBoard()
+        }
         if(e.code in funcKeys) {       
           this.actionFunctionalKeys(e)
         }      
-      });       
+        if(!(e.code in funcKeys)) {
+          this.output.updateValue(e.key);
+        } 
+        if (this.board.keyMap[e.code]) {          
+          e.preventDefault();
+          this.board.keyMap[e.code].node.classList.add('active');
+          setTimeout(() => {
+            this.board.keyMap[e.code].node.classList.remove('active');
+          }, 100);
+        }
+      });
+  
+      document.addEventListener('click', (e) => {      
+        if (e.target.innerText === 'CapsLk') {
+          this.isCapsLock = !this.isCapsLock;
+        }      
+      });
+  
+      document.addEventListener('keyup', (e) => {
+        if (e.key === "Shift") {
+          this.shiftPressed = false;
+        }
+        if (e.key === "Alt") {
+          this.altPressed = false;
+        }
+      });  
     } 
 
     updateBoard() {
