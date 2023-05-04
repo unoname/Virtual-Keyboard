@@ -7,11 +7,11 @@ export class Output extends Control {
   }
 
   updateValue(text) {
-	let start = this.node.selectionStart;
+  let start = this.node.selectionStart;
 	let end = this.node.selectionEnd;
 	let input = this.node.value.substring(0, start) + text + this.node.value.substring(end);
 	this.node.value = input;
 	this.node.focus();
-	this.node.selectionEnd = ( start == end ) ? (end + text.length) : end ;   
+	this.node.selectionEnd = ( start == end ) ? (end + text.length) : end ; 
   }
 }
