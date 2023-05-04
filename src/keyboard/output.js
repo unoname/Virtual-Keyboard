@@ -6,7 +6,7 @@ export class Output extends Control {
     this.node.setAttribute('autofocus', 'true')
   }
 
-  updateValue(value) {
+  updateValue(text) {
   let start = this.node.selectionStart;
 	let end = this.node.selectionEnd;
 	let input = this.node.value.substring(0, start) + text + this.node.value.substring(end);
