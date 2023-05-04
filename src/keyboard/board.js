@@ -15,7 +15,10 @@ export class Board extends Control {
         let keyLabel = this.lang == 'en' ? key.symbol : key.symbolRu;        
       let codeKey = key['code'];  
       let keyConstructor =  new Key(rowView.node, keyLabel, 'keys');      
-      if(key['isSpecial']) keyConstructor.node.className = `keys ${codeKey} func` 
+      if(key['isSpecial']) {
+        keyConstructor.node.className = `keys ${codeKey} func`;        
+      } 
+      keyConstructor.node.setAttribute('dataset', `${keyLabel}`)
       this.keyMap[codeKey] = keyConstructor
       });      
     }    

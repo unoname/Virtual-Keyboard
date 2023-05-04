@@ -17,6 +17,7 @@ const funcKeys = {
   Space: 'Space',
   AltRight: 'AltRight',
   ControlRight: 'ControlRight',
+  ArrowUp: 'ArrowUp',
   ArrowLeft: 'ArrowLeft',
   ArrowDown: 'ArrowDown',
   ArrowRight: 'ArrowRight',
