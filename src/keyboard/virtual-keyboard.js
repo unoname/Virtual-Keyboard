@@ -4,7 +4,6 @@ import {ChangeColor} from "../layout/changeColor.js";
 import {Theme} from "../layout/theme.js";
 import { Info } from "../layout/Info.js";
 
-
 export class VirtualKeyboard extends Control {
   constructor(parentNode, tagName, className){
 super(parentNode, tagName, className);
@@ -24,10 +23,6 @@ changeBoardColor(){
 const inputColor = this.changeColor.node.querySelector('.colors_input')
 const boardColor = document.querySelector('.keyboard_lights')
 inputColor.addEventListener('input',function() {
-  // for(let i = 0; i < keys.length; i++) {
-  //     keys[i].style.color = inputColors.value
-  // }
-  
   boardColor.style.backgroundColor = inputColor.value;
 })
  }

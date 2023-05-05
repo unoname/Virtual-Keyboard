@@ -14,11 +14,12 @@ export class Board extends Control {
       row.forEach(key => {        
         let keyLabel = this.lang == 'en' ? key.symbol : key.symbolRu;        
       let codeKey = key['code'];  
-      let keyConstructor =  new Key(rowView.node, keyLabel, 'keys');      
+      let keyConstructor =  new Key(rowView.node, keyLabel, 'keys');
+      keyConstructor.node.setAttribute('data', keyLabel)
       if(key['isSpecial']) keyConstructor.node.className = `keys ${codeKey} func` 
       this.keyMap[codeKey] = keyConstructor
       });      
-    }    
+    }   
   }
 
 }

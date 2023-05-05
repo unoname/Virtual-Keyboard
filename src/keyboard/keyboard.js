@@ -37,7 +37,7 @@ export class Keyboard extends Control {
   } 
 
     handleEvent(){
-      this.board.node.addEventListener('click', (e) => {            
+      document.addEventListener('mousedown', (e) => {            
         if (e.target.classList.contains('keys')) {
           if(!e.target.classList.contains('func')) {
             let keyLabel = e.target.innerText;
@@ -48,12 +48,15 @@ export class Keyboard extends Control {
           }  else {
             this.actionFunctionalKeys(e)
           }        
-          e.target.classList.add('active');
-          setTimeout(() => {
-            e.target.classList.remove('active');
-          }, 100);
+          e.target.classList.add('active');        
         }
-      });      
+      });     
+      
+      document.addEventListener('mouseup', (e) => {  
+        if (e.target.classList.contains('keys')) {
+        e.target.classList.remove('active');
+        }
+      })
       document.addEventListener('keydown', (e) => {
         if (e.code === 'CapsLock') {
           this.isCapsLock = !this.isCapsLock;
@@ -71,14 +74,12 @@ export class Keyboard extends Control {
           this.actionFunctionalKeys(e)
         }      
         if(!(e.code in funcKeys)) {
-          this.output.updateValue(e.key);
+          let value = this.board.keyMap[e.code].node.getAttribute('data')
+          this.output.updateValue(value);
         } 
         if (this.board.keyMap[e.code]) {          
           e.preventDefault();
-          this.board.keyMap[e.code].node.classList.add('active');
-          setTimeout(() => {
-            this.board.keyMap[e.code].node.classList.remove('active');
-          }, 100);
+          this.board.keyMap[e.code].node.classList.add('active');         
         }
       });
   
@@ -94,6 +95,10 @@ export class Keyboard extends Control {
         }
         if (e.key === "Alt") {
           this.altPressed = false;
+        }
+        if (this.board.keyMap[e.code]) {          
+          e.preventDefault();                
+            this.board.keyMap[e.code].node.classList.remove('active');       
         }
       });  
     } 
